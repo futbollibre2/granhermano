@@ -1,0 +1,115 @@
+
+<html lang="es">
+<head>
+
+</head>    
+<meta name=robots content=noindex />
+<style>body{margin:0;padding:0}</style>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/reidoscanais/rdc@main/assets/css/player-v3.1.min.css">
+<script type="text/javascript" src="../js/aclib.js"></script>
+<script type="text/javascript">
+  aclib.runPop({
+      zoneId: '8995174',
+  });
+</script>
+<script>
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\[").replace(/[\]]/, "\]");
+  var regex = new RegExp("[\?&]" + name + "=([^&#]*)"),
+  results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+var getURL = getParameterByName('get');
+var getLang = getParameterByName('lang');
+var getIMG = getParameterByName('img');
+var getKEY  = getParameterByName('key');
+var getKEY2  = getParameterByName('key2');
+</script>
+<script src="//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+<script> jwplayer.key = 'ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=';
+</script>
+<div id="player"></div>
+<script>
+var mt = ["//edge-live02-mun", "//edge-live01-bel", "//edge-live02-bel", "//edge-live11-hr", "//edge-live12-hr", "//edge-live13-hr", "//edge-live14-hr", "//edge-live15-hr", "//edge-live16-hr", "//edge-live17-hr", "//edge-live31-hr", "//edge-live32-hr", "//edge-live12-sl", "//edge-live13-sl", "//edge-live15-sl", "//edge-live16-sl", "//edge-live17-sl", "//edge-live31-sl", "//edge-live32-sl", "//edge-vod02-sl", "//edge-vod04-sl", "//edge9-sl", "//edge10-sl"];
+var playerInstance = jwplayer("player");
+
+function initializePlayer(autoplay) {
+  var random = Math.floor(Math.random() * mt.length);
+  playerInstance.setup({
+    playlist: [{
+      title : "REPRODUCTOR | Futbol Libre 2",
+      description: "futbollibre2.online",
+      "sources": [
+        {
+          "default": false,
+          "type": "dash",
+          "file": mt[random] + atob(getURL), 
+          "drm": {
+            "clearkey": { "keyId": atob(getKEY), "key": atob(getKEY2)}
+          },
+          "label": "0"
+        }
+      ]
+    }],
+    width: "100%",
+    height: "100%",
+    aspectratio: "16:9",
+    autostart: autoplay, 
+    cast: {},
+    sharing: {}
+  });
+}
+
+if (getLang == "") {
+  var lang = 1;
+} else {
+  var lang = parseInt(getLang); 
+}
+
+jwplayer().on('play', function(e) {
+  jwplayer().setCurrentAudioTrack(lang);
+});
+
+function tryInitialize() {
+  initializePlayer(false); 
+  playerInstance.on('error', function(e) {
+    if (e.code === 241401 || 241403) {
+
+      setTimeout(tryInitialize, 1000);
+    }
+  });
+}
+
+function checkAndInitialize(mtUrl) {
+  checkMtStatus(mtUrl, function(status) {
+    if (status === 200) {
+
+      initializePlayer(true);
+    } else {
+
+      setTimeout(function() {
+        random = Math.floor(Math.random() * mt.length);
+        checkAndInitialize(mt[random]);
+      }, 1000);
+    }
+  });
+}
+
+function checkMtStatus(mtUrl, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        callback(200);
+      } else {
+        callback(xhr.status);
+      }
+    }
+  };
+  xhr.open('HEAD', mtUrl, true);
+  xhr.send();
+}
+
+tryInitialize();
+</script>
+</html>
