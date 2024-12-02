@@ -1,0 +1,36 @@
+html{font-size:14px}
+@media(min-width:768px)
+{html{font-size:16px}}.container{max-width:960px}.pricing-header{max-width:700px}.card-deck .card{min-width:200px}.border-top{border-top:1px solid #e5e5e5}
+
+.border-bottom{
+background-color: #18181b
+}
+.box-shadow{
+box-shadow:0 .25rem .75rem rgba(0,0,0,.05)}.lazyLoad{width:100%;opacity:0}.visible{transition:opacity 1000ms ease;opacity:1
+}
+#boton {
+text-align: left;
+background-color: #18181b;
+}
+#boton p {
+    margin-bottom: 10px;}#boton a.btn-fl {margin: 5px;}
+
+#boton button.btn-fl {
+margin-top: 10px;
+}
+    .logo-img {
+        width: 250px;
+        height: 178; 
+	margin-bottom: 10px;
+    }
+
+@media (max-width: 768px) {
+    .logo-img {
+        width: 150px;
+        height: auto;
+	margin-bottom: 10px;
+    }
+}
+.article{
+    padding: 50px;
+}
